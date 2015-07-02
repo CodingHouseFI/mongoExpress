@@ -22,6 +22,11 @@ block content
           .what echo the server time + body variables in JSON { serverTime: .... }
           code.example /test { a: 7, b: 'testing' } => { serverTime: "2015-...", a: 7, b: "testing" }
       tr
+        td GET
+        td /questions
+        td
+          .what list all the questions in the databse
+      tr
         td POST
         td /questions
         td

@@ -13,9 +13,18 @@ mongoose.connect(process.env.MONGO_URL);
 // });
 
 var Question = mongoose.model("Question", {
-  body: { type: String, required: true },
+  body: { type: String, required: true, unique: true },
   email: { type: String, required: true },
-  createdAt: Date
+  createdAt: { type: Date, default: Date.now }
+});
+
+// temp500Qs = Array.apply(null, Array(500)).map(function(n, i) { return { body: "Q" + i, email: 'test@test.com' } });
+// Question.create(temp500Qs);
+
+Question.on('index', function(err) {
+  if (err) {
+    console.error(err);
+  }
 });
 
 router.get('/', function(req, res, next) {
@@ -40,8 +49,20 @@ router.post("/questions", function(req, res) {
       console.log(err);
       res.status(400).json({ error: "Validation Failed" });
     }
+    console.log("savedQuestion:", savedQuestion);
     res.json(savedQuestion);
   });
+});
+
+router.get("/questions", function(req, res) {
+  Question.find({}).sort({ createdAt: 'desc' }).limit(3).exec(function(err, questions) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ error: "Could not read questions data" });
+    }
+    res.json(questions);
+  });
+
 });
 
 module.exports = router;
