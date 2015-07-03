@@ -38,7 +38,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/tests', function(req, res, next) {
-  res.render('tests');
+  Question.remove({}, function(err) {
+    res.render('tests');
+  });
 });
 
 router.get('/test', function(req, res, next) {
@@ -75,7 +77,19 @@ router.get("/questions", function(req, res) {
     }
     res.json(questions);
   });
+});
 
+router.get("/questions/:questionCode", function(req, res) {
+  Question.findOne({slug: req.params.questionCode}).exec(function(err, question) {
+    if (err) {
+      console.log(err);
+      res.status(400).json({ error: "Could not read questions data" });
+    }
+    if (!question) {
+      res.status(404);
+    }
+    res.json(question);
+  });
 });
 
 module.exports = router;
