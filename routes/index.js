@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var MD5 = require("MD5");
 
 mongoose.connect(process.env.MONGO_URL);
 
@@ -15,6 +16,7 @@ mongoose.connect(process.env.MONGO_URL);
 var Question = mongoose.model("Question", {
   body: { type: String, required: true, unique: true },
   email: { type: String, required: true },
+  gravatarUrl: { type: String, required: true },
   createdAt: { type: Date, default: Date.now }
 });
 
@@ -43,6 +45,8 @@ router.post('/test', function(req, res, next) {
 
 router.post("/questions", function(req, res) {
   var question = new Question(req.body);
+
+  question.gravatarUrl = "http://www.gravatar.com/avatar/" + MD5(req.body.email);
 
   question.save(function(err, savedQuestion) {
     if (err) {
