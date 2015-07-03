@@ -35,6 +35,10 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Mongo API' });
 });
 
+router.get('/tests', function(req, res, next) {
+  res.render('tests');
+});
+
 router.get('/test', function(req, res, next) {
   res.send("just testing");
 });
