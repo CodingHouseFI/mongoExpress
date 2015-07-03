@@ -92,4 +92,32 @@ router.get("/questions/:questionCode", function(req, res) {
   });
 });
 
+router.patch("/questions/:questionCode", function(req, res) {
+  Question.findOneAndUpdate({ slug: req.params.questionCode }, req.body, { new: true }, function(err, updatedQuestion) {
+    console.log(err, updatedQuestion);
+    if (err) {
+      console.log(err);
+      res.status(400).json({ error: "Could not read questions data" });
+    }
+    if (!updatedQuestion) {
+      res.status(404);
+    }
+    res.json(updatedQuestion);
+  });
+});
+
+router.delete("/questions/:questionCode", function(req, res) {
+  Question.findOneAndRemove({ slug: req.params.questionCode }, function(err, updatedQuestion) {
+    console.log(err, updatedQuestion);
+    if (err) {
+      console.log(err);
+      res.status(400).json({ error: "Could not read questions data" });
+    }
+    if (!updatedQuestion) {
+      res.status(404);
+    }
+    res.json({message: 'question deleted'});
+  });
+});
+
 module.exports = router;
