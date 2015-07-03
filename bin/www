@@ -14,13 +14,13 @@ if (process.argv[2]) {
       var mongoose = require('mongoose');
       mongoose.connect(process.env.MONGO_URL);
       var Question = mongoose.model("Question", {});
-      Question.remove({});
+      Question.remove({}, function(err) {
+        process.exit();
+      });
       break;
     default:
       console.log("Unknown action");
   }
-
-  process.exit();
   return;
 }
 

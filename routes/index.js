@@ -22,8 +22,10 @@ var Question = mongoose.model("Question", {
   createdAt: { type: Date, default: Date.now }
 });
 
-// temp500Qs = Array.apply(null, Array(500)).map(function(n, i) { return { body: "Q" + i, email: 'test@test.com' } });
-// Question.create(temp500Qs);
+// temp500Qs = Array.apply(null, Array(500)).map(function(n, i) { return { body: "Q" + i, email: 'test@test.com', slug: "q-" + i, gravatarUrl: "test" } });
+// Question.create(temp500Qs, function(err) {
+//   console.error(err);
+// });
 
 Question.on('index', function(err) {
   if (err) {
@@ -52,7 +54,7 @@ router.post('/test', function(req, res, next) {
 router.post("/questions", function(req, res) {
   var question = new Question(req.body);
 
-  question.slug = slug(req.body.body);
+  question.slug = slug(req.body.body || '');
   question.gravatarUrl = "http://www.gravatar.com/avatar/" + MD5(req.body.email);
 
   question.save(function(err, savedQuestion) {
