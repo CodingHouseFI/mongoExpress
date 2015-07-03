@@ -17,6 +17,7 @@ describe('Our API', function(){
         .end(function(err, res) {
         if (err) { throw err; }
         expect(res.status).to.equal(200);
+        expect(res.body.email).to.equal('test@test.com');
         expect(res.body.slug).to.equal('one-test-question');
         done();
       });
@@ -33,7 +34,15 @@ describe('Our API', function(){
       });
     });
   });
-  // describe('GET /questions', function(){
-  //   "/questions"
-  // })
-})
+  describe('GET /questions', function(){
+    it("returns an array of all the questions", function(done) {
+      request.get("/questions").end(function(err, res) {
+        if (err) { throw err; }
+        expect(res.status).to.equal(200);
+        expect(res.body).to.be.an('array');
+        expect(res.body[0].body).to.equal("one test question");
+        done();
+      });
+    });
+  });
+});
