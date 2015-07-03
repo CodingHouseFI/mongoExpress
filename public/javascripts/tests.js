@@ -45,4 +45,23 @@ describe('Our API', function(){
       });
     });
   });
+  describe('GET /questions/:questionCode', function(){
+    it("returns the question which have that code", function(done) {
+      request.get("/questions/one-test-question").end(function(err, res) {
+        if (err) { throw err; }
+        expect(res.status).to.equal(200);
+        expect(res.body.body).to.equal("one test question");
+        done();
+      });
+    });
+  });
+  describe('GET /questions/:questionCode', function(){
+    it("returns 404 if the code does not exist", function(done) {
+      request.get("/questions/dsajflkasdjfjadsjflkjaslkdf").end(function(err, res) {
+        if (err) { throw err; }
+        expect(res.status).to.equal(404);
+        done();
+      });
+    });
+  });
 });
