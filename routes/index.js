@@ -19,7 +19,13 @@ var Question = mongoose.model("Question", {
   body: { type: String, required: true, unique: true },
   email: { type: String, required: true },
   gravatarUrl: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  answers: [{
+    body: String,
+    email: String,
+    gravatarUrl: String,
+    createdAt: { type: Date, default: Date.now }
+  }]
 });
 
 // temp500Qs = Array.apply(null, Array(500)).map(function(n, i) { return { body: "Q" + i, email: 'test@test.com', slug: "q-" + i, gravatarUrl: "test" } });
@@ -117,6 +123,26 @@ router.delete("/questions/:questionCode", function(req, res) {
       res.status(404);
     }
     res.json({message: 'question deleted'});
+  });
+});
+
+router.post("/questions/:questionCode/answers", function(req, res) {
+  Question.findOne({ slug: req.params.questionCode }, function(err, question) {
+    if (err) {
+      console.log(err);
+      res.status(400);
+    }
+    if (!question) {
+      res.status(404);
+    }
+    question.answers.push(req.body);
+    question.save(function(err, savedQuestion) {
+      if (err) {
+        console.log(err);
+        res.status(400);
+      }
+      res.json(savedQuestion);
+    });
   });
 });
 
