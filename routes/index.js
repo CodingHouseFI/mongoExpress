@@ -135,7 +135,9 @@ router.post("/questions/:questionCode/answers", function(req, res) {
     if (!question) {
       res.status(404);
     }
-    question.answers.push(req.body);
+    var answer = req.body;
+    answer.gravatarUrl = "http://www.gravatar.com/avatar/" + MD5(answer.email);
+    question.answers.push(answer);
     question.save(function(err, savedQuestion) {
       if (err) {
         console.log(err);
